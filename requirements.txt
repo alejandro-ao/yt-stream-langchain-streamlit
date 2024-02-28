@@ -3,6 +3,6 @@ langchain_community==0.0.16
 langchain_core==0.1.17
 langchain_openai==0.0.5
 python-dotenv==1.0.1
-streamlit==1.30.0
 chromadb==0.3.29
 bs4==0.0.2
+streamlit==1.31.1
