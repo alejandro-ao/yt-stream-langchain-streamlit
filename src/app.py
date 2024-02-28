@@ -14,15 +14,26 @@ load_dotenv()
 st.set_page_config(page_title="Chat with websites", page_icon="🤖")
 st.title("Chat with websites")
 
-template = """
-You are a helpful assistant. Answer the following questions considering the history of the conversation:
+def get_response(user_query, chat_history):
 
-Chat history: {chat_history}
+    template = """
+    You are a helpful assistant. Answer the following questions considering the history of the conversation:
 
-User question: {user_question}
-"""
+    Chat history: {chat_history}
 
-prompt = ChatPromptTemplate.from_template(template)
+    User question: {user_question}
+    """
+
+    prompt = ChatPromptTemplate.from_template(template)
+
+    llm = ChatOpenAI()
+        
+    chain = prompt | llm | StrOutputParser()
+    
+    return chain.stream({
+        "chat_history": chat_history,
+        "user_question": user_query,
+    })
 
 # session state
 if "chat_history" not in st.session_state:
@@ -49,13 +60,6 @@ if user_query is not None and user_query != "":
         st.markdown(user_query)
 
     with st.chat_message("AI"):
-        llm = ChatOpenAI()
-        
-        chain = prompt | llm | StrOutputParser()
-        stream = chain.stream({
-            "chat_history": st.session_state.chat_history,
-            "user_question": user_query,
-        })
-        response = st.write_stream(stream)
+        response = st.write_stream(get_response(user_query, st.session_state.chat_history))
 
     st.session_state.chat_history.append(AIMessage(content=response))
