@@ -9,8 +9,8 @@ from langchain_core.prompts import ChatPromptTemplate
 load_dotenv()
 
 # app config
-st.set_page_config(page_title="Chat with websites", page_icon="🤖")
-st.title("Chat with websites")
+st.set_page_config(page_title="Streaming bot", page_icon="🤖")
+st.title("Streaming bot")
 
 def get_response(user_query, chat_history):
 
